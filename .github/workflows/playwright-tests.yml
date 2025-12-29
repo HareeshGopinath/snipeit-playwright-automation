@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Step 1: Checkout the repository
+      # Step 1: Checkout repository
       - name: Checkout repository
         uses: actions/checkout@v4
 
@@ -27,18 +27,18 @@ jobs:
       - name: Restore NuGet packages
         run: dotnet restore
 
-      # Step 4: Restore dotnet tools
-      - name: Restore dotnet tools
-        run: dotnet tool restore
-
-      # Step 5: Install Playwright browsers
-      - name: Install Playwright browsers
-        run: dotnet playwright install
-
-      # Step 6: Build the project
+      # Step 4: Build project (required before Playwright tool)
       - name: Build project
         run: dotnet build --no-restore
 
+      # Step 5: Restore dotnet tools
+      - name: Restore dotnet tools
+        run: dotnet tool restore
+
+      # Step 6: Install Playwright browsers
+      - name: Install Playwright browsers
+        run: dotnet playwright install
+
       # Step 7: Run tests with detailed console logging
       - name: Run tests
-        run: dotnet test --logger "console;verbosity=detailed" --no-build
+        run: dotnet test --logger "console;verbosity=detailed" --no-build --no-restore
