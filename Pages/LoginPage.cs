@@ -1,5 +1,4 @@
 using Microsoft.Playwright;
-using System.Threading.Tasks;
 
 namespace SnipeIT.Tests.Pages
 {
@@ -14,28 +13,19 @@ namespace SnipeIT.Tests.Pages
 
         public async Task LoginAsync(string username, string password)
         {
-            // Navigate to login page
-            await _page.GotoAsync("https://demo.snipeitapp.com/login", new PageGotoOptions
-            {
-                Timeout = 120_000 // 2 minutes for CI
-            });
+            await _page.GotoAsync("https://demo.snipeitapp.com/login");
 
-            // Wait for username field
-            await _page.WaitForSelectorAsync("#username", new PageWaitForSelectorOptions
-            {
-                Timeout = 120_000
-            });
+            var usernameLocator = _page.Locator("#username");
+            await usernameLocator.WaitForAsync(new LocatorWaitForOptions { State = WaitForSelectorState.Visible });
+            await usernameLocator.FillAsync(username);
 
-            // Fill login form
-            await _page.FillAsync("#username", username);
-            await _page.FillAsync("#password", password);
+            var passwordLocator = _page.Locator("#password");
+            await passwordLocator.WaitForAsync(new LocatorWaitForOptions { State = WaitForSelectorState.Visible });
+            await passwordLocator.FillAsync(password);
+
             await _page.ClickAsync("button[type='submit']");
 
-            // Wait for a stable element on dashboard to confirm login
-            await _page.WaitForSelectorAsync("text=Assets", new PageWaitForSelectorOptions
-            {
-                Timeout = 120_000
-            });
+            await _page.WaitForURLAsync("**/dashboard");
         }
     }
 }
