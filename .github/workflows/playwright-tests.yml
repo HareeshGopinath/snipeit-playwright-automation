@@ -5,36 +5,36 @@ on:
     branches:
       - main
   pull_request:
-    branches:
-      - main
-  workflow_dispatch: # allows manual trigger
 
 jobs:
   test:
     runs-on: ubuntu-latest
 
     steps:
+      # 1. Checkout the repository
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Setup .NET 8 SDK
+      # 2. Setup .NET
+      - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '8.0.x'
 
-      - name: Install dependencies
+      # 3. Restore NuGet packages
+      - name: Restore packages
         run: dotnet restore
 
-      - name: Add Playwright package (if not present)
-        run: dotnet add package Microsoft.Playwright --version 1.44.0
-
-      - name: Build project
-        run: dotnet build --no-restore --configuration Debug
-
+      # 4. Install Playwright CLI and browsers
+      - name: Restore .NET tools
+        run: dotnet tool restore
       - name: Install Playwright browsers
-        run: |
-          dotnet tool restore
-          npx playwright install --with-deps
+        run: dotnet playwright install
 
+      # 5. Build the project
+      - name: Build
+        run: dotnet build --no-restore
+
+      # 6. Run tests
       - name: Run tests
-        run: dotnet test --logger "console;verbosity=detailed" --no-restore --no-build
+        run: dotnet test --logger "console;verbosity=detailed" --no-build --no-restore
