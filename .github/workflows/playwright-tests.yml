@@ -23,7 +23,7 @@ jobs:
         run: dotnet restore
 
       - name: Restore .NET tools
-        run: dotnet tool restore    # <-- this is the new line
+        run: dotnet tool restore    
 
       - name: Install Playwright browsers
         run: dotnet playwright install
