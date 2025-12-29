@@ -1,13 +1,16 @@
-# .NET build outputs
+# .NET build folders
 bin/
 obj/
 
-# Playwright binaries
+# Playwright
 .playwright/
 
 # User-specific files
-.vscode/
-.idea/
+*.user
+*.suo
 
 # OS files
 .DS_Store
+
+# Logs
+*.log
