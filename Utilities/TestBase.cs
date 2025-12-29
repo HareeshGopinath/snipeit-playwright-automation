@@ -14,9 +14,10 @@ namespace SnipeIT.Tests.Utilities
         public async Task Setup()
         {
             Playwright = await Microsoft.Playwright.Playwright.CreateAsync();
+
             Browser = await Playwright.Chromium.LaunchAsync(new BrowserTypeLaunchOptions
             {
-                Headless = true
+                Headless = Environment.GetEnvironmentVariable("CI") == "true"
             });
 
             Context = await Browser.NewContextAsync();
@@ -26,10 +27,8 @@ namespace SnipeIT.Tests.Utilities
         [TearDown]
         public async Task TearDown()
         {
-            if (Browser != null)
-                await Browser.CloseAsync();
-
-            Playwright?.Dispose();
+            await Browser.CloseAsync();
+            Playwright.Dispose();
         }
     }
 }

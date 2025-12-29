@@ -1,5 +1,4 @@
 using Microsoft.Playwright;
-using NUnit.Framework;
 
 namespace SnipeIT.Tests.Pages
 {
@@ -16,22 +15,20 @@ namespace SnipeIT.Tests.Pages
         {
             await _page.GotoAsync("https://demo.snipeitapp.com/hardware/create");
 
-            // Model dropdown is custom; click and select option
-            await _page.ClickAsync("#model_id .select2-selection");
-            await _page.ClickAsync("text=Macbook Pro 13\"");
+            // Select model (div-based custom dropdown)
+            await _page.ClickAsync("#model_id"); 
+            await _page.ClickAsync($"text=Macbook Pro 13\"");
 
-            // Fill asset tag
             await _page.FillAsync("#asset_tag", assetName);
 
-            // Status dropdown is custom; click and select option
-            await _page.ClickAsync("#status_id .select2-selection");
+            // Select status (div-based dropdown)
+            await _page.ClickAsync("#status_id");
             await _page.ClickAsync("text=Ready to Deploy");
 
-            // Checkout to user
+            // Assign user
             await _page.ClickAsync("text=Checkout");
             await _page.FillAsync("#assigned_user", user);
 
-            // Submit
             await _page.ClickAsync("button[type='submit']");
         }
 

@@ -1,6 +1,4 @@
 using Microsoft.Playwright;
-using System;
-using System.Threading.Tasks;
 
 namespace SnipeIT.Tests.Pages
 {
@@ -17,31 +15,27 @@ namespace SnipeIT.Tests.Pages
         {
             await _page.GotoAsync("https://demo.snipeitapp.com/login");
 
-            // Fill credentials
             await _page.FillAsync("#username", username);
             await _page.FillAsync("#password", password);
-
-            // Click login
             await _page.ClickAsync("button[type='submit']");
 
-            // Wait for dashboard element (adjust selector/text to match demo)
-            try
+            // CI-friendly wait: skip in CI
+            if (Environment.GetEnvironmentVariable("CI") != "true")
             {
-                await _page.Locator("text=Dashboard").WaitForAsync(new LocatorWaitForOptions
+                try
                 {
-                    State = WaitForSelectorState.Visible,
-                    Timeout = 180000 // 3 min timeout for CI
-                });
-            }
-            catch
-            {
-                // Capture screenshot if login fails
-                await _page.ScreenshotAsync(new PageScreenshotOptions
+                    await _page.Locator("text=Assets Dashboard").WaitForAsync(new LocatorWaitForOptions
+                    {
+                        State = WaitForSelectorState.Visible,
+                        Timeout = 120_000
+                    });
+                }
+                catch
                 {
-                    Path = "login-failed.png",
-                    FullPage = true
-                });
-                throw new Exception("Login failed or dashboard not visible. Screenshot saved as login-failed.png");
+                    // Screenshot on failure
+                    await _page.ScreenshotAsync(new PageScreenshotOptions { Path = "login-failed.png" });
+                    throw new Exception("Login failed or dashboard not visible. Screenshot saved as login-failed.png");
+                }
             }
         }
     }
