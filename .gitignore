@@ -1,14 +1,13 @@
-# .NET
+# .NET build outputs
 bin/
 obj/
 
-# Playwright
+# Playwright binaries
 .playwright/
-**/.playwright/
 
-# User-specific
+# User-specific files
 .vscode/
 .idea/
 
-# OS
+# OS files
 .DS_Store
