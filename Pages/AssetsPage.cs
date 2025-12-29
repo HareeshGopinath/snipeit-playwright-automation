@@ -1,4 +1,5 @@
 using Microsoft.Playwright;
+using System.Threading.Tasks;
 
 namespace SnipeIT.Tests.Pages
 {
@@ -15,13 +16,22 @@ namespace SnipeIT.Tests.Pages
         {
             await _page.GotoAsync("https://demo.snipeitapp.com/hardware/create");
 
-            await _page.SelectOptionAsync("#model_id", new[] { "Macbook Pro 13\"" });
-            await _page.FillAsync("#asset_tag", assetName);
-            await _page.SelectOptionAsync("#status_id", new[] { "Ready to Deploy" });
+            // Handle custom dropdown for model
+            await _page.ClickAsync("#model_id");
+            await _page.ClickAsync("text=Macbook Pro 13\"");
 
+            // Fill asset tag
+            await _page.FillAsync("#asset_tag", assetName);
+
+            // Handle custom dropdown for status
+            await _page.ClickAsync("#status_id");
+            await _page.ClickAsync("text=Ready to Deploy");
+
+            // Checkout to user
             await _page.ClickAsync("text=Checkout");
             await _page.FillAsync("#assigned_user", user);
 
+            // Submit the form
             await _page.ClickAsync("button[type='submit']");
         }
 

@@ -29,7 +29,7 @@ namespace SnipeIT.Tests.Utilities
             // Open new page
             Page = await Context.NewPageAsync();
 
-            // Set professional default timeouts for all actions and navigation
+            // Set professional default timeouts for actions and navigation
             Page.SetDefaultTimeout(60_000);           // 60s for actions
             Page.SetDefaultNavigationTimeout(60_000); // 60s for navigation
         }
