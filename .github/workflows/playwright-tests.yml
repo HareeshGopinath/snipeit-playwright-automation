@@ -5,31 +5,40 @@ on:
     branches:
       - main
   pull_request:
+    branches:
+      - main
 
 jobs:
   test:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      # Step 1: Checkout the repository
+      - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Setup .NET
+      # Step 2: Setup .NET 8 SDK
+      - name: Setup .NET 8 SDK
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '8.0.x'
 
+      # Step 3: Restore NuGet packages
       - name: Restore NuGet packages
         run: dotnet restore
 
-      - name: Build project
-        run: dotnet build
-
-      - name: Restore .NET tools
+      # Step 4: Restore dotnet tools
+      - name: Restore dotnet tools
         run: dotnet tool restore
 
+      # Step 5: Install Playwright browsers
       - name: Install Playwright browsers
         run: dotnet playwright install
 
-      - name: Run Tests
-        run: dotnet test --logger "console;verbosity=detailed"
+      # Step 6: Build the project
+      - name: Build project
+        run: dotnet build --no-restore
+
+      # Step 7: Run tests with detailed console logging
+      - name: Run tests
+        run: dotnet test --logger "console;verbosity=detailed" --no-build
