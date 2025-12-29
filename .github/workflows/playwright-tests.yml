@@ -5,13 +5,18 @@ on:
     branches:
       - main
   pull_request:
+    branches:
+      - main
 
 jobs:
   test:
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
 
     steps:
-      # 1. Checkout the repository
+      # 1. Checkout repository
       - name: Checkout repository
         uses: actions/checkout@v4
 
@@ -25,16 +30,18 @@ jobs:
       - name: Restore packages
         run: dotnet restore
 
-      # 4. Install Playwright CLI and browsers
+      # 4. Restore .NET tools
       - name: Restore .NET tools
         run: dotnet tool restore
+
+      # 5. Install Playwright browsers
       - name: Install Playwright browsers
         run: dotnet playwright install
 
-      # 5. Build the project
-      - name: Build
+      # 6. Build project
+      - name: Build project
         run: dotnet build --no-restore
 
-      # 6. Run tests
+      # 7. Run tests
       - name: Run tests
         run: dotnet test --logger "console;verbosity=detailed" --no-build --no-restore
