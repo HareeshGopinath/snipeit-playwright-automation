@@ -17,41 +17,29 @@ namespace SnipeIT.Tests.Utilities
             // Create Playwright instance
             Playwright = await Microsoft.Playwright.Playwright.CreateAsync();
 
-            // Launch Chromium browser in headless mode
+            // Launch Chromium in headless mode (CI-friendly)
             Browser = await Playwright.Chromium.LaunchAsync(new BrowserTypeLaunchOptions
             {
                 Headless = true
             });
 
-            // Create a new browser context
+            // Create browser context
             Context = await Browser.NewContextAsync();
 
-            // Open a new page
+            // Open new page
             Page = await Context.NewPageAsync();
 
-            // Set default timeouts for page actions and navigation
-            Page.SetDefaultTimeout(60000);           // 60 seconds for all actions
-            Page.SetDefaultNavigationTimeout(60000); // 60 seconds for navigations
+            // Set professional default timeouts for all actions and navigation
+            Page.SetDefaultTimeout(60_000);           // 60s for actions
+            Page.SetDefaultNavigationTimeout(60_000); // 60s for navigation
         }
 
         [TearDown]
         public async Task TearDown()
         {
-            if (Page != null)
-            {
-                await Page.CloseAsync();
-            }
-
-            if (Context != null)
-            {
-                await Context.CloseAsync();
-            }
-
-            if (Browser != null)
-            {
-                await Browser.CloseAsync();
-            }
-
+            if (Page != null) await Page.CloseAsync();
+            if (Context != null) await Context.CloseAsync();
+            if (Browser != null) await Browser.CloseAsync();
             Playwright?.Dispose();
         }
     }
