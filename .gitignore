@@ -1,16 +1,13 @@
-# .NET build folders
+# .NET
 bin/
 obj/
 
 # Playwright
 .playwright/
+**/.playwright/
 
-# User-specific files
-*.user
-*.suo
-
-# OS files
+# OS
 .DS_Store
 
-# Logs
-*.log
+# IDE
+.vscode/
