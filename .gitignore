@@ -1,0 +1,14 @@
+# .NET
+bin/
+obj/
+
+# Playwright
+.playwright/
+**/.playwright/
+
+# User-specific
+.vscode/
+.idea/
+
+# OS
+.DS_Store
