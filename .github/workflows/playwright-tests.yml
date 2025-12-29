@@ -22,12 +22,14 @@ jobs:
       - name: Restore NuGet packages
         run: dotnet restore
 
+      - name: Build project
+        run: dotnet build
+
       - name: Restore .NET tools
-        run: dotnet tool restore    
+        run: dotnet tool restore
 
       - name: Install Playwright browsers
         run: dotnet playwright install
 
       - name: Run Tests
         run: dotnet test --logger "console;verbosity=detailed"
-
